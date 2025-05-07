@@ -3,7 +3,7 @@ import argparse
 import json
 import sys
 
-
+# Spec that defines the plugin's capabilities
 plugin = {
     "name": "Calculator",
     "directives": [
@@ -19,6 +19,7 @@ plugin = {
 }
 
 
+# Helper to publish result to stdout as JSON
 def declare_result(content):
     """Declare result as JSON to stdout
 
@@ -31,6 +32,7 @@ def declare_result(content):
     raise SystemExit(0)
 
 
+# Execute a directive
 def run_directive(name, data):
     """Execute a directive with the given name and data
 
@@ -45,13 +47,13 @@ def run_directive(name, data):
     return [result]
 
 
-if __name__ == "__main__":
+def main(argv=None):
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--role")
     group.add_argument("--directive")
     group.add_argument("--transform")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.directive:
         data = json.load(sys.stdin)
@@ -62,3 +64,7 @@ if __name__ == "__main__":
         raise NotImplementedError
     else:
         declare_result(plugin)
+
+
+if __name__ == "__main__":
+    main()
